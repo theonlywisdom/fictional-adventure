@@ -39,7 +39,7 @@ jobs:
 
     # Job-level permission (kept — top-level also present)
     permissions:
-      contents: write
+      contents: read
       pages: write     
       id-token: write  
 
