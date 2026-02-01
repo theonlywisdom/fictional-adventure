@@ -60,7 +60,5 @@ jobs:
         with: 
           path: './out'
       - name: deploy        
-        id: deployment
-        uses: action/deploy-page@v1
           
 
