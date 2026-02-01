@@ -65,7 +65,7 @@ jobs:
       - name: export static site (if present)
         # next export -> produces ./out; --if-present avoids failure if the script doesn't exist
         run: npm run export --if-present
-      - name: debug: print run id and out folder
+      - name: "debug: print run id and out folder"
         run: |
           echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"
           echo "Listing ./out:"
