@@ -1,5 +1,12 @@
 name: build-test-deploy
 on: push
+
+# Optional: put permissions at top level so tokens are available to jobs if needed
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs: 
   build:
     runs-on: ubuntu-latest
@@ -28,7 +35,9 @@ jobs:
 
   deploy:
     needs: test
+    runs-on: ubuntu-latest
 
+    # Job-level permission (kept — top-level also present)
     permissions:
       contents: write
       pages: write     
@@ -37,8 +46,6 @@ jobs:
     environment:
       name: production
       url: ${{ steps.deployment.outputs.page_url }}
-    
-    runs-on: ubuntu-latest
     
     steps:
       - name: checkout repo
@@ -54,7 +61,15 @@ jobs:
         with:
           static_site_generator: next
       - run: npm install
-      - run: npm run build    
+      - run: npm run build
+      - name: export static site (if present)
+        # next export -> produces ./out; --if-present avoids failure if the script doesn't exist
+        run: npm run export --if-present
+      - name: debug: print run id and out folder
+        run: |
+          echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"
+          echo "Listing ./out:"
+          ls -la ./out || echo "./out does not exist"
       - name: upload artifacts
         uses: actions/upload-pages-artifact@v3
         with: 
