@@ -29,16 +29,18 @@ jobs:
   deploy:
     needs: test
 
-    permissions: 
+    permissions:
       contents: write
-      pages: write
-      id-token: write
+      pages: write     
+      id-token: write  
 
     environment:
       name: production
       url: ${{ steps.deployment.outputs.page_url }}
+    
     runs-on: ubuntu-latest
-    steps: 
+    
+    steps:
       - name: checkout repo
         uses: actions/checkout@v4
         with:
@@ -52,12 +54,9 @@ jobs:
         with:
           static_site_generator: next
       - run: npm install
-      - run: npm run build
+      - run: npm run build    
       - name: upload artifacts
         uses: actions/upload-pages-artifact@v3
-        with:
+        with: 
           path: './out'
       - name: deploy
-        id: deployment
-        uses: action/deploy-page@v4
-          
